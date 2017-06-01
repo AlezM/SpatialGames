@@ -53,30 +53,30 @@ public class PointMethod : Source {
 		cooperatorsRegions = GetRegions (map, PlayerType.C);
 
 	}
-
-	/*
+		
 	void FittingPoints () {
 		if (cooperatorsRegions == null)
 			return;
 		
 		List<Border> borders = GetBorders (map, cooperatorsRegions, PlayerType.C);
 
-//		ArrayList
-
 		int R = 1;
 
 		foreach (Border border in borders) {
 			int listSize = border.points.Count;
-			border.points [0].used = true; //В нулевую полюбому ставлю
+		//	border.points [0].used = true; 						//В нулевую полюбому ставлю
+			BorderPoint[] points = border.points.ToArray();
+			points [0].used = true; 
+
 			for (int i = 0, counter = 0; counter < listSize;) { //Это внешний цикл, тут я просто прохожусь по каждой точке и решаю, ставить в неё ТОЧКУ или нет
 																//Прикол цикла в том, что он знает точку на которой мы стоим, и количество точек, в которых ТОЧКИ
 
-				if (border.points [i].used == true)	continue; //Вдруг тут уже есть точка
+				if (points [i].used == true)	continue; //Вдруг тут уже есть точка
 				double lastDist = mapSize*mapSize;
 				int nearestCellIndex = -1;
 
 				for (int j = 0; j < listSize; j++) { 								//Тут ищу самую близкую к i-ой точке точку, но не ближе чем 2R
-					if (border.points [j].used == true)	continue;					//Вдруг там уже есть точка
+					if (points [j].used == true)	continue;					//Вдруг там уже есть точка
 					double dist = Distanse (border.points [i], border.points [j]);  //Смотрим расстояние
 
 					if ( dist > 2*R && dist < lastDist) {
@@ -88,7 +88,7 @@ public class PointMethod : Source {
 								notEnoughSpace = true;
 						}
 						if (!notEnoughSpace) {
-							border.points [j].used = true;
+							points [j].used = true;
 							nearestCellIndex = j;			//Нашли точку в которую можно поставить ТОЧКУ
 						}
 					}
@@ -109,7 +109,7 @@ public class PointMethod : Source {
 		}
 
 	}
-*/
+
 
 	double Distanse (BorderPoint p1, BorderPoint p2) {
 		return ((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
