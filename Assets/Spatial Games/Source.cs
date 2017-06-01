@@ -231,7 +231,10 @@ public class Source : MonoBehaviour {
 		List<Border> borders = new List<Border>();
 		foreach (Region region in regions) {
 			Border border = new Border();
+
+			border.points = new List<BorderPoint>();
 			foreach (Coord coord in region.coords) {
+
 				bool up = false, right = false, down = false, left = false;
 				for (int x = -1; x <= 1; x++) {
 					for (int y = -1; y <= 1; y++) {
@@ -275,16 +278,18 @@ public class Source : MonoBehaviour {
 				}
 
 				//Add border points to list
-				border.points = new List<BorderPoint>();
 				for (int i = 0; i < 3; i++) {
 					for (int j = 0; j < 3; j++) {
-						if (sidePoints [i, j] && (i == 0 || j == 0)) {
-							border.points.Add (new BorderPoint ((double)coord.tileX - (i - 1) * 0.5, (double)coord.tileY - (j - 1) * 0.5));
+						if (sidePoints [i, j] && (i == 1 || j == 1)) {
+							double cache;
+							double newI = ( (cache = (double)coord.tileX - (i - 1) * 0.5) >= 0)? cache: cache + size;
+							double newJ = ( (cache = (double)coord.tileY - (j - 1) * 0.5)  >= 0)? cache: cache + size;
+
+							border.points.Add (new BorderPoint (newI, newJ));
+							//	(double)coord.tileX - (i - 1) * 0.5, (double)coord.tileY - (j - 1) * 0.5));
 						}
 					}
 				}
-
-
 			}
 
 			//Sorting list of points
