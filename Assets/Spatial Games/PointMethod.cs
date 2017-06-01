@@ -53,12 +53,15 @@ public class PointMethod : Source {
 		cooperatorsRegions = GetRegions (map, PlayerType.C);
 
 	}
+
 	/*
 	void FittingPoints () {
 		if (cooperatorsRegions == null)
 			return;
 		
 		List<Border> borders = GetBorders (map, cooperatorsRegions, PlayerType.C);
+
+//		ArrayList
 
 		int R = 1;
 
