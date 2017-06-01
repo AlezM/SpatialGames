@@ -226,9 +226,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSize: 50
   b: 1.81
-  defectorsSpawnPercentage: 21
+  defectorsSpawnPercentage: 90
   seed: 
-  useRandomSeed: 0
+  useRandomSeed: 1
 --- !u!4 &2073311514
 Transform:
   m_ObjectHideFlags: 0

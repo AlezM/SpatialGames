@@ -278,7 +278,7 @@ public class Source : MonoBehaviour {
 				}
 
 				//Add border points to list
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < 3; i++) {      					 //ПРОБЛЕМА!!!!
 					for (int j = 0; j < 3; j++) {
 						if (sidePoints [i, j] && (i == 1 || j == 1)) {
 							double cache;
