@@ -5,8 +5,8 @@ using UnityEngine;
 public class MandelbrotSet : MonoBehaviour {
 
 	class ComplexNumber {
-		public double x { get; }
-		public double y { get; }
+        public double x;
+        public double y;
 		public double r { get{ return (x * x + y * y); } }
 
 		public ComplexNumber () {

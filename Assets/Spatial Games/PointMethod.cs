@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.IO;
 
 public class PointMethod : Source {
 
@@ -20,7 +22,10 @@ public class PointMethod : Source {
 	List<Region> defectorsRegions;
 	List<Region> cooperatorsRegions;
 
-	void Start () {
+    //Output
+    StreamWriter file;
+
+    void Start () {
 		SetUpMap ();	
 	}
 
@@ -36,8 +41,10 @@ public class PointMethod : Source {
 		}
 
 		if (Input.GetKeyDown (KeyCode.RightAlt)) {
+            file = new StreamWriter("C:/Users/Alez.M/Documents/University/SpatialGames/PointMethod/1.81.txt");
 			FittingPoints ();
 			Debug.Log ("Poits Set");
+            file.Close();
 		}
 
 
@@ -52,7 +59,7 @@ public class PointMethod : Source {
 		map = new Tile[mapSize, mapSize];
 
 		if (useRandomSeed) {
-			seed = Random.value.ToString();
+			seed = UnityEngine.Random.value.ToString();
 		}
 
 		System.Random pseudoRandom = new System.Random(seed.GetHashCode());
@@ -86,9 +93,23 @@ public class PointMethod : Source {
 		
 		List<Border> borders = GetBorders (map, cooperatorsRegions, PlayerType.C);
 
-		for (double R = 0.5; R < mapSize; R *= 2) {
-			foreach (Border border in borders) {
-				int listSize = border.points.Count;					
+	
+		foreach (Border border in borders) {
+            file.Write("claster_" + border.points.Count.ToString() + " = { \n{");
+            for (double R = 0.5; R < mapSize; R *= 2) {
+                if (R*2 < mapSize)
+                    file.Write(R.ToString() + ", ");
+                else
+                    file.Write(R.ToString());
+            }
+            file.Write("}, \n{");
+
+
+            for (double R = 0.5; R < mapSize; R *= 2) {
+				int listSize = border.points.Count;
+                if (listSize < 4)
+                    break;
+
 				BorderPoint[] points = border.points.ToArray ();
 
 				points [0].used = true; 	//В нулевую полюбому ставлю
@@ -107,26 +128,31 @@ public class PointMethod : Source {
 
 						double dist = Distanse (points [i], points [j]);  //Смотрим расстояние
 
-						if (dist >= 2 * R && dist <= prevDist) { //Проверяю j-ю точку
+						if (dist >= 2 * R && dist < prevDist) { //Проверяю j-ю точку
 							//Блиииин, не учитываю, что могу случайно поставить в точку, радом с которой уже есть точки(((((((
 							//Опять ломается((((((( Снова цикл, чтобы посмотреть,есть ли в окрестности точки?
 							bool notEnoughSpace = false;
 							for (int k = 0; k < listSize; k++) {
-								if (Distanse (border.points [k], border.points [j]) < 2 * R && border.points [k].used == true && k != j)
+								if ( (Distanse (points [k], points [j]) < 2 * R) && (points [k].used) && (k != j) ) { 
 									notEnoughSpace = true;
+                                }
 							}
 
-							if (notEnoughSpace == false) {
-		/*///////*/				points [j].used = true;
+							if (!notEnoughSpace) {
+		/*///////*/			//	points [j].used = true;
 								prevDist = dist;
 								nearestCellIndex = j;		//Нашли точку в которую можно поставить ТОЧКУ
 							}
-						}
-					}
+                            else {
+                                Debug.Log("notEnoughSpace");
+                            }
+                        }
+                    }
 
 					if (nearestCellIndex != -1) {
 						i = nearestCellIndex;
-						counter++;					
+                        points[nearestCellIndex].used = true;
+                        counter++;					
 					} else {
 						//Почему-то не нашлось такой точки, похоже что больше не получится поставить, 
 						//нужно выходить из цикла, и брать другую границу. Ещё нужно запомнить количество точек, еоторые я поставил
@@ -140,15 +166,17 @@ public class PointMethod : Source {
 
 				int c = PointsCount (points);
 				Debug.Log ("Size: " + listSize.ToString () + "; R: " + R.ToString () + "; Points: " + c.ToString ());
+                file.Write(c.ToString() + ", ");
 			}
-		}
+            file.Write("} };");
+        }
 	}
 		
 	double Distanse (BorderPoint p1, BorderPoint p2) {
-		float dx = Mathf.Abs((float)(p2.x - p1.x));
-		float dy = Mathf.Abs((float)(p2.y - p1.y));
-		double x = Mathf.Min ( Mathf.Abs (dx), Mathf.Abs (mapSize - dx) );
-		double y = Mathf.Min ( Mathf.Abs (dy), Mathf.Abs (mapSize - dy) );
+		double dx = Math.Abs(p2.x - p1.x);
+        double dy = Math.Abs(p2.y - p1.y);
+		double x = Math.Min ( Math.Abs (dx), Math.Abs ((double)mapSize - dx) );
+		double y = Math.Min ( Math.Abs (dy), Math.Abs ((double)mapSize - dy) );
 
 		return ( x*x + y*y );
 	}
@@ -156,7 +184,8 @@ public class PointMethod : Source {
 	int PointsCount (BorderPoint[] _points) {
 		int k = 0;
 		for (int i = 0; i < _points.Length; i++)
-			if (_points[i].used) k++;
+			if (_points[i].used == true)
+                k++;
 		return k;
 	}
 

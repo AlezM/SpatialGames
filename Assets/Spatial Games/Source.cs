@@ -242,13 +242,13 @@ public class Source : MonoBehaviour {
 						int memberY = (coord.tileY + y + size) % size;
 						if ((map [memberX, memberY].type != type) && (x == 0 || y == 0)) {
 							if (x == -1 && y == 0)
-								up = true;
-							if (x == 1 && y == 0)
-								down = true;
-							if (x == 0 && y == -1)
 								left = true;
-							if (x == 0 && y == 1)
+							if (x == 1 && y == 0)
 								right = true;
+							if (x == 0 && y == -1)
+								up = true;
+							if (x == 0 && y == 1)
+								down = true;
 						}
 					}
 				}
@@ -281,12 +281,13 @@ public class Source : MonoBehaviour {
 				for (int i = 0; i < 3; i++) {      					 //ПРОБЛЕМА!!!!
 					for (int j = 0; j < 3; j++) {
 						if (sidePoints [i, j] && (i == 1 || j == 1)) {
-							double cache;
-							double newI = ( (cache = (double)coord.tileX - (i - 1) * 0.5) >= 0)? cache: cache + size;
-							double newJ = ( (cache = (double)coord.tileY - (j - 1) * 0.5)  >= 0)? cache: cache + size;
+							double cache = 0;
+							double newI = ( (cache = (double)coord.tileX + (i - 1) * 0.5) >= 0)? cache: (cache + size);
+							double newJ = ( (cache = (double)coord.tileY + (j - 1) * 0.5)  >= 0)? cache: (cache + size);
+
+                            Debug.Log("(" + newI + ", " + newJ + ")");
 
 							border.points.Add (new BorderPoint (newI, newJ));
-							//	(double)coord.tileX - (i - 1) * 0.5, (double)coord.tileY - (j - 1) * 0.5));
 						}
 					}
 				}
