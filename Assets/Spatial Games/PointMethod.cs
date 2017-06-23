@@ -91,10 +91,18 @@ public class PointMethod : Source {
 		if (cooperatorsRegions == null)
 			return;
 		
-		List<Border> borders = GetBorders (map, cooperatorsRegions, PlayerType.C);
+		List<Border> fullBorders = GetBorders (map, cooperatorsRegions, PlayerType.C);
+        Border wholeBorder = new Border();
+        wholeBorder.points = new List<BorderPoint>();
 
-	
-		foreach (Border border in borders) {
+        foreach (Border border in fullBorders) {
+            wholeBorder.points.AddRange(border.points);
+        }
+
+        List<Border> borders = new List<Border>();
+        borders.Add(wholeBorder);
+
+        foreach (Border border in borders) {
             file.Write("claster_" + border.points.Count.ToString() + " = { \n{");
             for (double R = 0.5; R < mapSize; R *= 2) {
                 if (R*2 < mapSize)
@@ -203,7 +211,7 @@ public class PointMethod : Source {
 		if (Input.GetKeyDown (KeyCode.Keypad2)) {
 			for (int i = 0; i < mapSize; i++) {
 				for (int j = 0; j < mapSize; j++) {
-					map [i, j] = (i == j)? new Tile (PlayerType.C): new Tile (PlayerType.D);
+					map [i, j] = (i < mapSize/2)? new Tile (PlayerType.C): new Tile (PlayerType.D);
 				}
 			}
 			cooperatorsRegions = GetRegions (map, PlayerType.C);

@@ -271,7 +271,7 @@ public class Source : MonoBehaviour {
 					sidePoints [1, 2] = true;
 					sidePoints [2, 2] = true;
 				}
-				if (right) {
+				if (left) {
 					sidePoints [0, 0] = true;
 					sidePoints [0, 1] = true;
 					sidePoints [0, 2] = true;
@@ -447,4 +447,59 @@ public class Source : MonoBehaviour {
 
 		return regionsTextures;
 	}
+
+    //Minkovsli
+    public bool[,] BorderMap(Tile[,] map, int size)
+    {
+        int mapSize = map.GetLength(0);
+        int borderMapSize = size * mapSize;
+        bool[,] m = new bool[borderMapSize, borderMapSize];
+
+        for (int i = 0; i < mapSize; i++)
+        {
+            for (int j = 0; j < mapSize; j++)
+            {
+                if (map[i, j].type != map[(i - 1 + mapSize) % mapSize, j].type)
+                {
+                    for (int k = size * j; k < size * (j + 1) + 1; k++)
+                    {
+                        m[i * size, k % borderMapSize] = true;
+                    } 
+                }
+            }
+        }
+
+        for (int i = 0; i < mapSize; i++)
+        {
+            for (int j = 0; j < mapSize; j++)
+            {
+                if (map[j, i].type != map[j, (i - 1 + mapSize) % mapSize ].type)
+                {
+                    for (int k = size * j; k < size * (j + 1) + 1; k++)
+                    {
+                        m[k % borderMapSize, i * size] = true;
+                    }
+                }
+            }
+        }
+
+        return m;
+    }
+
+    public Texture2D BorderTexture(bool[,] borderMap)
+    {
+        int size = borderMap.GetLength(0);
+        Texture2D outTexure = new Texture2D(size, size);
+        outTexure.filterMode = FilterMode.Point;
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                outTexure.SetPixel(i, size - j - 1, (borderMap[i, j])? Color.black: Color.white);
+            }
+        }
+        outTexure.Apply();
+
+        return outTexure;
+    } 
 }
