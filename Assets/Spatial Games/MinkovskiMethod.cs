@@ -26,6 +26,7 @@ public class MinkovskiMethod : Source {
     //Textures
     Texture2D mapTexture;
     Texture2D borderTexture;
+    public Texture2D inputTex;
 
     //Border
     bool[,] borderMap;
@@ -36,6 +37,8 @@ public class MinkovskiMethod : Source {
 
     void Update()
     {
+        Tests();
+
         if (Input.GetKeyDown(KeyCode.Return))
             SetUpMap();
 
@@ -49,6 +52,14 @@ public class MinkovskiMethod : Source {
             borderMap = BorderMap(map, borderMapSize);
             borderTexture = BorderTexture(borderMap);
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            borderMap = BorderMap(map, borderMapSize);
+            borderTexture = BorderTexture(borderMap);
+            BoxCountingDemention(borderMap, 1, 100, 1);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.S) && (borderTexture != null))
         {
@@ -100,5 +111,80 @@ public class MinkovskiMethod : Source {
         mapTexture = MapTexture(map);
     }
 
+    void Tests()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    map[i, j] = (i == mapSize / 2) ? new Tile(PlayerType.C) : new Tile(PlayerType.D);
+                }
+            }           
+            mapTexture = MapTexture(map);
+        }
 
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    map[i, j] = (i < mapSize / 2) ? new Tile(PlayerType.C) : new Tile(PlayerType.D);
+                }
+            }
+            mapTexture = MapTexture(map);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    map[i, j] = (i <= 0.75 * mapSize && i >= 0.25 * mapSize && j <= 0.75 * mapSize && j >= 0.25 * mapSize) ? new Tile(PlayerType.C) : new Tile(PlayerType.D);
+                }
+            }
+            mapTexture = MapTexture(map);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    map[i, j] = (i == mapSize/2 && j == mapSize/2) ? new Tile(PlayerType.D) : new Tile(PlayerType.C);
+                }
+            }
+            mapTexture = MapTexture(map);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            borderMap = TextureToBitMap(inputTex);
+            borderTexture = inputTex;
+            BoxCountingDemention(borderMap, 20, 200, 1);
+        }
+    }
+
+    bool [,] TextureToBitMap (Texture2D tex)
+    {
+        if (tex == null)
+            return null;
+
+        int size = tex.width;
+        bool[,] bitMap = new bool[size, size];
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                bitMap[i, j] = (tex.GetPixel(i, j) == Color.black);
+            }
+        }
+
+        return bitMap;
+    }
 }

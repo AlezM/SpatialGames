@@ -140,7 +140,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Step: 0.002
-  maxRecursion: 200
+  scale: 0.000001
+  center: {x: -1.41, y: 0}
+  maxRecursion: 1000
 --- !u!81 &1249182199
 AudioListener:
   m_ObjectHideFlags: 0

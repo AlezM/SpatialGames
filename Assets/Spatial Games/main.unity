@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3c84d45b18cae4d82ff9af8a16b4ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: 50
-  b: 1.81
+  mapSize: 100
+  b: 1.79
   defectorsSpawnPercentage: 21
   seed: 
   useRandomSeed: 1

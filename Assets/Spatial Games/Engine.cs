@@ -62,6 +62,8 @@ public class Engine : Source {
 	}
 
 
+    int ScreenShotCount = 0;
+
 	void Update () {
 		if (Input.GetKey (KeyCode.Space)) {
 		//	MakeStep ();
@@ -81,7 +83,28 @@ public class Engine : Source {
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			Application.Quit();
 		}
-	}
+
+        if (Input.GetKeyDown(KeyCode.S) && (mapTexture != null))
+        {
+            byte[] bytes = mapTexture.EncodeToPNG();
+            File.WriteAllBytes(Application.dataPath + "/../SavedScreen_" + ScreenShotCount.ToString() + ".png", bytes);
+            ScreenShotCount++;
+            Debug.Log("Saved");
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            for (int i = 0; i < mapSize; i++)
+            {
+                for (int j = 0; j < mapSize; j++)
+                {
+                    map[i, j] = (i == mapSize / 2 && j == mapSize / 2) ? new Tile(PlayerType.D) : new Tile(PlayerType.C);
+                }
+            }
+            mapTexture = MapTexture(map);
+        }
+    }
 
 	void FixedUpdate () {
 		if (Input.GetKeyDown (KeyCode.RightArrow) && mapSize < 500)

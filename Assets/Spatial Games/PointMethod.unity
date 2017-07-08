@@ -206,6 +206,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2073311514}
   - component: {fileID: 2073311513}
+  - component: {fileID: 2073311515}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -219,7 +220,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2073311512}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 381f705c1ff4705489fcc3b62c137a03, type: 3}
   m_Name: 
@@ -242,3 +243,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2073311515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2073311512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6722b9463c9f32b418ac462861cd9997, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapSize: 1000
+  b: 1.81
+  defectorsSpawnPercentage: 21
+  seed: 
+  useRandomSeed: 1
+  borderMapSize: 8
+  inputTex: {fileID: 2800000, guid: d425052120cbf6a4491d25110c6aa075, type: 3}
